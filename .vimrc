@@ -42,6 +42,8 @@ Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 " C# Omnisharp-Roslyn
 Plug 'OmniSharp/omnisharp-vim'
+" Pywal
+Plug 'dylanaraps/wal.vim'
 
 "" Prettier Config
 let g:prettier#autoformat = 0
