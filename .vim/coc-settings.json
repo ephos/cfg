@@ -1,0 +1,93 @@
+{
+  // "dialog.floatHighlight": "Normal",
+  "dialog.floatBorderHighlight": "Normal",
+  "dialog.rounded": true,
+  "notification.border": true,
+  "notification.focusable": true,
+  "notification.highlightGroup": "CocFloating",
+  "diagnostic-languageserver.filetypes": {
+    // "zsh": "shellcheck"
+    // "sh": "shellcheck",
+    // "yaml": ["yamllint"],
+    // "lua": "selene",
+    "cmake": ["cmake-lint"],
+    "systemd": "systemd-analyze"
+  },
+  "diagnostic-languageserver.formatFiletypes": {
+    // "sh": "shfmt"
+    //   "zsh": "shfmt"
+  },
+  "prettier.tabWidth": 4,
+  "prettier.singleQuote": true,
+  "prettier.semi": true,
+  "prettier.trailingComma": "es5",
+  // "lightbulb.excludeFiletypes": [],
+  // "lightbulb.enableVirtualText": true,
+  // "lightbulb.virtualText": "💡",
+  // "lightbulb.text": "Code action",
+  // "lightbulb.enableSign": false,
+  "codeLens.enable": true,
+  "codeLens.separator": "‣",
+  "codeLens.subseparator": " 🔍| ",
+  "codeLens.position": "eol",
+  "list.indicator": ">",
+  "signature.enable": true,
+  "signature.target": "float",
+  "tabnine.priority": 99,
+  "tabnine.shortcut": "TN",
+  "snippets.priority": 99,
+  "snippets.shortcut": "",
+  "suggest.pumFloatConfig": {
+    "border": true,
+    "rounded": true,
+    "highlight": "CocSuggestFloating",
+    "borderhighlight": "FloatBorder",
+    "maxWidth": 120,
+    "focusable": true
+  },
+  "suggest.snippetIndicator": "",
+  "suggest.languageSourcePriority": 99,
+  "suggest.removeDuplicateItems": true,
+  "suggest.detailField": "preview",
+  "suggest.detailMaxLength": 100,
+  "suggest.defaultSortMethod": "none",
+  "suggest.virtualText": false,
+  "suggest.selection": "first", // recentlyUsed
+  "suggest.acceptSuggestionOnCommitCharacter": true,
+  "suggest.completionItemKindLabels": {
+    "default": "",
+    "text": "", // 
+    "method": "", // 
+    "function": "", // ƒ
+    "constructor": "", // 
+    "field": "", // 料  
+    "variable": "", //  
+    "class": "", // ﴯ 
+    "interface": "", // 
+    "module": "", // 
+    "property": "", // ﰠ
+    "unit": "", //  塞
+    "value": "",
+    "enum": "", // 
+    "keyword": "", //  
+    "snippet": "", //     
+    "color": "",
+    "file": "", // 
+    "reference": "", //  渚
+    "folder": "", // 
+    "enumMember": "", // 
+    "constant": "", // 
+    "struct": "פּ", // 
+    "event": "", // 鬒
+    "operator": "Ψ", // 
+    "typeParameter": "" //   
+  },
+  "powershell.integratedConsole.showOnStartup": false,
+  "languageserver": {
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "coc-markdownlint": ">=1.12.7",
+    "coc-powershell": ">=0.1.4",
+    "coc-pyright": ">=1.1.269",
+    "coc-snippets": ">=3.1.1"
+  }
+}
