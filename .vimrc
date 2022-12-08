@@ -1,4 +1,4 @@
-" https://dougblack.io/words/a-good-vimrc.html
+" HTTPS://dougblack.io/words/a-good-vimrc.html
 
 " Plugins
 call plug#begin('~/.vim/myplugins')
@@ -22,10 +22,14 @@ Plug 'hashivim/vim-terraform'
 Plug 'lilydjwg/colorizer'
 " Color theme
 Plug 'dracula/vim', {'as':'dracula'}
+Plug 'junegunn/seoul256.vim'
+Plug 'morhetz/gruvbox'
+Plug 'tomasr/molokai'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'ayu-theme/ayu-vim'
 Plug 'ajmwagar/vim-deus'
 Plug 'joshdick/onedark.vim'
+Plug 'sickill/vim-monokai'
 " NERD Commenter
 Plug 'preservim/nerdcommenter'
 " NERD Tree
@@ -37,15 +41,21 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'maxmellon/vim-jsx-pretty'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install', 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'iraphql', 'markdown', 'vue', 'yaml', 'html'] }
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
+" Prettier
+Plug 'prettier/vim-prettier', { 'do': 'yarn install', 'for': ['javascript', 'PowerShell','typescript', 'css', 'less', 'scss', 'json', 'iraphql', 'markdown', 'vue', 'yaml', 'html'] }
+Plug 'preservim/vim-markdown'
 " C# Omnisharp-Roslyn
 Plug 'OmniSharp/omnisharp-vim'
 " Pywal
 Plug 'dylanaraps/wal.vim'
+" Github Copilot
+Plug 'github/copilot.vim'
+" Vim Fugative (git)
+Plug 'tpope/vim-fugitive'
+Plug 'mzlogin/vim-markdown-toc'
+call plug#end() 
 
-"" Prettier Config
+" Prettier Config
 let g:prettier#autoformat = 0
 " autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
 
@@ -53,7 +63,7 @@ let g:prettier#autoformat = 0
 set laststatus=2
 
 " Vim Markdown Config
-autocmd BufNewFile,BufRead *.md set filetype=markdown
+"autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd Filetype markdown setlocal ts=2 sw=2 expandtab
 let g:vim_markdown_conceal = 2
 let g:vim_markdown_conceal_code_blocks = 0
@@ -65,18 +75,45 @@ let g:vim_markdown_autowrite = 1
 let g:vim_markdown_edit_url_in = 'tab'
 let g:vim_markdown_follow_anchor = 1
 
-call plug#end() 
+" Github Copilot Config
+"start disabled
+let g:copilot_enabled = 0
+" map autocomplete to Ctrl+J
+map <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+
+" NERDTree Config
+let g:NERDTreeShowLineNumbers=1
+let g:NERDTreeWinSize=35
+let g:NERDTreeMinimalUI=1
+let g:NERDTreeDirArrows=1
+"autocmd VimEnter * NERDTree
+
+" CoC Settings
+inoremap <silent><expr> <tab> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<TAB>"
+"inoremap <silent><expr> <tab> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<TAB>u\<C-l>u"
+inoremap <silent><expr> <cr> "\<c-g>u\<CR>"
+" use <tab> for trigger completion and navigate to the next complete item
+"inoremap <silent><expr> <TAB>
+"      \ coc#pum#visible() ? coc#pum#next(1) :
+"      \ CheckBackspace() ? "\<Tab>" :
+"      \ coc#refresh()
+inoremap <expr><C-j> coc#pum#visible() ? coc#pum#next(1) : "\<C-h>"
+inoremap <expr><C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+"inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Colorscheme
 set background=dark
 "colorscheme ayu
-colorscheme dracula
+colorscheme dracula 
 "colorscheme onedark
 "colorscheme PaperColor
 "colorscheme deus
 let g:lightline = {
   \ 'colorscheme': 'dracula',
   \ }
+
 " Editor Settings
 syntax on
 set lazyredraw " improve performance
@@ -119,6 +156,8 @@ set sidescrolloff=5 " keep at least 5 lines left/right
 set history=200
 set undolevels=1000 " 1000 undos
 set updatecount=100 " switch every 100 chars
+" Clipboard Settings
+set clipboard=unnamedplus " copy/paste to system clipboard
 
 " Keybinds
 nnoremap <C-t> :NERDTreeToggle<CR>
