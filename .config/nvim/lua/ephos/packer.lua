@@ -31,6 +31,12 @@ return require('packer').startup(function(use)
   use 'ray-x/guihua.lua' -- recommanded if need floating window support
   use 'neovim/nvim-lspconfig'
 
+  -- Find them bugs
+  use 'mfussenegger/nvim-dap'
+  use 'leoluz/nvim-dap-go'
+  use 'theHamsta/nvim-dap-virtual-text'
+  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+
   -- LSP, autocomplete is life
   use {
       'VonHeikemen/lsp-zero.nvim',

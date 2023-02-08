@@ -35,3 +35,11 @@ vim.opt.termguicolors = true
 vim.opt.scrolloff = 5
 vim.opt.sidescrolloff = 5
 
+-- Netrw
+vim.g.netrw_banner = 0
+vim.g.netrw_winsize = 80
+vim.g.netrw_browse_split = 20
+vim.g.netrw_liststyle = 3
+vim.g.netrw_sizestyle = "H"
+vim.g.netrw_browse_split = 4 -- Open in previous window
+vim.g.netrw_preview = 1
