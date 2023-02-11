@@ -49,7 +49,7 @@ Plug 'OmniSharp/omnisharp-vim'
 " Pywal
 Plug 'dylanaraps/wal.vim'
 " Github Copilot
-Plug 'github/copilot.vim'
+"Plug 'github/copilot.vim'
 " Vim Fugative (git)
 Plug 'tpope/vim-fugitive'
 Plug 'mzlogin/vim-markdown-toc'
@@ -118,6 +118,9 @@ let g:lightline = {
 syntax on
 set lazyredraw " improve performance
 set noswapfile " disable the swapfile
+" Line Length
+set colorcolumn=80
+
 " Line Settings
 set relativenumber " show line numbers relative to current cursor
 set number " show line numbers

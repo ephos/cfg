@@ -84,4 +84,7 @@ return require('packer').startup(function(use)
   -- Minimap show me the way
   use 'wfxr/minimap.vim'
 
+  -- Cheat codez
+  use 'github/copilot.vim'
+
 end)
