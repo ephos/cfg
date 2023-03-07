@@ -4,7 +4,7 @@ lsp.preset('recommended')
 
 lsp.ensure_installed({
     'powershell_es',
-    'sumneko_lua',
+    --'sumneko_lua',
     'gopls',
     'tflint',
 

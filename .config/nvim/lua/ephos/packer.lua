@@ -60,6 +60,15 @@ return require('packer').startup(function(use)
       }
   }
 
+  -- I know I should use netrw, but I want fancy icons
+  use {
+      'nvim-tree/nvim-tree.lua',
+      requires = {
+        'nvim-tree/nvim-web-devicons', -- optional, for file icons
+      },
+      tag = 'nightly' -- optional, updated every week. (see issue #1193)
+    }
+
   -- The colors Duke, the colors!!!
   use('norcalli/nvim-colorizer.lua')
 
