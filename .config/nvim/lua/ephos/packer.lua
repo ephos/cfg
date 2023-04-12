@@ -40,6 +40,7 @@ return require('packer').startup(function(use)
   -- LSP, autocomplete is life
   use {
       'VonHeikemen/lsp-zero.nvim',
+      branch = 'v2.x',
       requires = {
           -- LSP Support
           {'neovim/nvim-lspconfig'},
@@ -59,6 +60,10 @@ return require('packer').startup(function(use)
           {'rafamadriz/friendly-snippets'},
       }
   }
+
+  -- Don't cut yourself on this C#
+  -- Also make sure to install this (https://github.com/OmniSharp/omnisharp-roslyn)
+  --use 'OmniSharp/omnisharp-vim'
 
   -- I know I should use netrw, but I want fancy icons
   use {
@@ -95,5 +100,11 @@ return require('packer').startup(function(use)
 
   -- Cheat codez
   use 'github/copilot.vim'
+
+  -- Don't get cut on that sharp letter C
+  use 'OmniSharp/omnisharp-vim'
+
+  -- Makin' Gamez (maybe)
+  use 'habamax/vim-godot'
 
 end)

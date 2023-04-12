@@ -16,7 +16,8 @@ local cmp_select = {behavior = cmp.SelectBehavior.Select}
 local cmp_mappings = lsp.defaults.cmp_mappings({
     ['<C-j>'] = cmp.mapping.select_next_item(cmp_select),
     ['<C-k>'] = cmp.mapping.select_prev_item(cmp_select),
-    ['Tab'] = cmp.mapping.confirm({ select = true}),
+    --['Tab'] = cmp.mapping.confirm({ select = true}),
+    ['<C-l>'] = cmp.mapping.confirm({ select = true}),
     ['CR'] = cmp.mapping.complete(),
 })
 
@@ -36,6 +37,7 @@ cmp.setup {
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = true })
 
 -- Fix that pesky "Undefined global `vim`" error for sumneko_lua
+--[[
 lsp.configure('sumneko_lua', {
     settings = {
         Lua = {
@@ -45,5 +47,23 @@ lsp.configure('sumneko_lua', {
         }
     }
 })
+--]]
+
+--lsp.configure('csharp_ls')
+--lsp.configure('gdscript')
+
 
 lsp.setup()
+
+require'lspconfig'.gdscript.setup{
+  on_attach = on_attach,
+  flags = lsp_flags,
+  filetypes = { "gd", "gdscript", "gdscript3" },
+}
+
+require'lspconfig'.omnisharp.setup{
+  on_attach = on_attach,
+  flags = lsp_flags,
+  cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
+  filetypes = { "cs", "csharp" },
+}

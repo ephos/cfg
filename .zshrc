@@ -10,7 +10,7 @@ fi
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#636363,bg=#2a2e38,bold,underline"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -78,7 +78,7 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git docker archlinux kubectl)
+plugins=(git docker archlinux kubectl zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -112,9 +112,14 @@ alias ovim="vim"
 alias cat="bat"
 alias k="kubectl"
 alias gogit="cd ~/code/git/"
+alias gocode="cd ~/code/"
+alias gouni="cd ~/code/unity/"
 alias ls="lsd -al"
 alias evimcfg="nvim ~/.config/nvim/"
 alias cls="clear"
+alias ssh2="kitty +kitten ssh"
+alias qq="pwsh -c 'Get-Secret -Name bw -Vault rjpVault -AsPlainText | Set-Clipboard'"
+
 
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
@@ -123,3 +128,4 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+source /home/ephos/code/git/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

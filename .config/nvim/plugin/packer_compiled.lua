@@ -214,6 +214,11 @@ _G.packer_plugins = {
     path = "/home/ephos/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
     url = "https://github.com/nvim-tree/nvim-web-devicons"
   },
+  ["omnisharp-vim"] = {
+    loaded = true,
+    path = "/home/ephos/.local/share/nvim/site/pack/packer/start/omnisharp-vim",
+    url = "https://github.com/OmniSharp/omnisharp-vim"
+  },
   ["packer.nvim"] = {
     loaded = true,
     path = "/home/ephos/.local/share/nvim/site/pack/packer/start/packer.nvim",
@@ -243,6 +248,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/ephos/.local/share/nvim/site/pack/packer/start/trouble.nvim",
     url = "https://github.com/folke/trouble.nvim"
+  },
+  ["vim-godot"] = {
+    loaded = true,
+    path = "/home/ephos/.local/share/nvim/site/pack/packer/start/vim-godot",
+    url = "https://github.com/habamax/vim-godot"
   }
 }
 

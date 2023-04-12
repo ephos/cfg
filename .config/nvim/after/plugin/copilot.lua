@@ -9,3 +9,4 @@ vim.g.copilot_no_tab_map = true
 vim.cmd[[imap <silent><script><expr> <C-/> copilot#Accept("\<CR>")]]
 vim.keymap.set('i', '<C-.>', '<Plug>(copilot-next)')
 vim.keymap.set('i', '<C-,>', '<Plug>(copilot-previous)')
+
