@@ -11,7 +11,7 @@ vim.opt.wrap = false
 -- Visual Indictaor
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
-vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = "#00ffc8"})
+vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = "#00ffc8" })
 
 -- Tabbin' Yo
 vim.opt.tabstop = 4
@@ -43,3 +43,13 @@ vim.g.netrw_liststyle = 3
 vim.g.netrw_sizestyle = "H"
 --vim.g.netrw_browse_split = 4 -- Open in previous window
 vim.g.netrw_preview = 1
+
+-- Set autoformat on save
+--[[
+vim.api.nvim_create_autocmd("BufWritePre", {
+    buffer = buffer,
+    callback = function()
+        vim.lsp.buf.format { async = false }
+    end
+})
+--]]
