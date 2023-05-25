@@ -2,6 +2,21 @@
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 vim.opt.completeopt = {'menuone', 'noselect', 'noselect'}
 
+-- Who but WB Mason to install our LSPs?
+require("mason").setup({
+    ui = {
+        icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗"
+        }
+    }
+})
+-- Make sure that nvim LSP client can lazy load these suckers
+require("mason-lspconfig").setup {
+    ensure_installed = { "lua_ls", "powershell_es", "pyright", "gopls" },
+}
+
 -- Remapping some keys for CMP and making it look -~Fancy~-
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
@@ -25,7 +40,20 @@ cmp.setup {
         { name = 'path' },
         }, {
             { name = 'nvim_lua' },
-        }),
+    }),
+    formatting = {
+        fields = {'menu', 'abbr', 'kind'},
+        format = function(entry, item)
+            local menu_icon = {
+                nvim_lsp = '',
+                luasnip = '',
+                buffer = '󰊄',
+                path = '',
+        }
+        item.menu = menu_icon[entry.source.name]
+        return item
+        end,
+    },
     window = {
         completion = {
             border = 'rounded',
@@ -34,10 +62,7 @@ cmp.setup {
 }
 
 -- Getting nice inline errors with Trouble to tell me how bad I am
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics,
-    { virtual_text = true })
-
---lsp.setup()
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = true })
 
 local lspconfig = require('lspconfig')
 local lsp_defaults = lspconfig.util.default_config
@@ -62,15 +87,53 @@ require('lspconfig').gopls.setup {
     },
 }
 
-local PSES_BUNDLE_PATH = vim.fn.expand("~/.local/share/nvim/mason/packages/powershell-editor-services/PowerShellEditorServices/Start-EditorServices.ps1")
-local SESSION_TEMP_PATH = "/tmp/nvim_powershell_session"
+require('lspconfig').terraformls.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    flags = lsp_flags,
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, {buffer=0}),
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer=0}),
+    vim.keymap.set("n", "<leader>gn", vim.diagnostic.goto_next, {buffer=0}),
+    vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, {buffer=0}),
+    settings = {
+        terraform = {
+            analyses = {
+                unusedparams = true,
+            },
+            staticcheck = true,
+        },
+    },
+}
+
+require('lspconfig').marksman.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    flags = lsp_flags,
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, {buffer=0}),
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer=0}),
+    vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, {buffer=0}),
+    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {buffer=0}),
+    vim.keymap.set("n", "<leader>gn", vim.diagnostic.goto_next, {buffer=0}),
+    vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, {buffer=0}),
+    settings = {
+        marksman = {
+            analyses = {
+                unusedparams = true,
+            },
+            staticcheck = true,
+        },
+    },
+}
+
+-- local PSES_BUNDLE_PATH = vim.fn.expand("~/.local/share/nvim/mason/packages/powershell-editor-services/PowerShellEditorServices/Start-EditorServices.ps1")
+-- local SESSION_TEMP_PATH = "/tmp/nvim_powershell_session"
 -- Ensure the temporary directory exists
-vim.fn.mkdir(SESSION_TEMP_PATH, "p")
+-- vim.fn.mkdir(SESSION_TEMP_PATH, "p")
 require 'lspconfig'.powershell_es.setup {
     capabilities = capabilities,
     on_attach = on_attach,
     flags = lsp_flags,
-    cmd = { "pwsh", "-NoLogo", "-NoProfile", "-Command", PSES_BUNDLE_PATH .. " -BundledModulesPath " .. PSES_BUNDLE_PATH .. " -LogPath " .. SESSION_TEMP_PATH .. "/logs.log -SessionDetailsPath " .. SESSION_TEMP_PATH .. "/session.json -FeatureFlags @() -AdditionalModules @() -HostName 'My Client' -HostProfileId 'myclient' -HostVersion 1.0.0 -Stdio -LogLevel Normal" },
+--    cmd = { "pwsh", "-NoLogo", "-NoProfile", "-Command", PSES_BUNDLE_PATH .. " -BundledModulesPath " .. PSES_BUNDLE_PATH .. " -LogPath " .. SESSION_TEMP_PATH .. "/logs.log -SessionDetailsPath " .. SESSION_TEMP_PATH .. "/session.json -FeatureFlags @() -AdditionalModules @() -HostName 'My Client' -HostProfileId 'myclient' -HostVersion 1.0.0 -Stdio -LogLevel Normal" },
     filetypes = { "ps1", "psm1", "psd1" },
     vim.keymap.set("n", "K", vim.lsp.buf.hover, {buffer=0}),
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer=0}),
@@ -104,12 +167,12 @@ require 'lspconfig'.powershell_es.setup {
     }
 }
 
-local PYRIGHT_PATH = vim.fn.expand("~/.local/share/nvim/mason/packages/pyright/node_modules/pyright/dist/pyright-langserver.js")
+--local PYRIGHT_PATH = vim.fn.expand("~/.local/share/nvim/mason/packages/pyright/node_modules/pyright/dist/pyright-langserver.js")
 require 'lspconfig'.pyright.setup {
     capabilities = capabilities,
     on_attach = on_attach,
     flags = lsp_flags,
-    cmd = { "node", PYRIGHT_PATH, "--stdio" },
+--    cmd = { "node", PYRIGHT_PATH, "--stdio" },
     vim.keymap.set("n", "K", vim.lsp.buf.hover, {buffer=0}),
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer=0}),
     vim.keymap.set("n", "gn", vim.diagnostic.goto_next, {buffer=0}),

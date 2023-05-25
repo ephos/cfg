@@ -40,31 +40,6 @@ return require('packer').startup(function(use)
     use 'theHamsta/nvim-dap-virtual-text'
     use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
 
-    -- LSP, autocomplete is life
-    use {
-        'VonHeikemen/lsp-zero.nvim',
-        branch = 'v2.x',
-        requires = {
-            -- LSP Support
-            { 'neovim/nvim-lspconfig' },
-            { 'williamboman/mason.nvim' },
-            { 'williamboman/mason-lspconfig.nvim' },
-
-            -- Autocompletion
-            { 'hrsh7th/nvim-cmp' },
-            { 'hrsh7th/cmp-buffer' },
-            { 'hrsh7th/cmp-path' },
-            { 'saadparwaiz1/cmp_luasnip' },
-            { 'hrsh7th/cmp-nvim-lsp' },
-            { 'hrsh7th/cmp-nvim-lua' },
-
-            -- Snippets
-            { 'L3MON4D3/LuaSnip' },
-            { 'rafamadriz/friendly-snippets' },
-        }
-    }
-
-
     --LSP Support, LSP you autocomplete me!
     use 'neovim/nvim-lspconfig'
     use 'williamboman/mason.nvim'
@@ -82,7 +57,7 @@ return require('packer').startup(function(use)
 
     -- Don't cut yourself on this C#
     -- Also make sure to install this (https://github.com/OmniSharp/omnisharp-roslyn)
-    --use 'OmniSharp/omnisharp-vim'
+    use 'OmniSharp/omnisharp-vim'
 
     -- I know I should use netrw, but I want fancy icons
     use {
@@ -120,12 +95,12 @@ return require('packer').startup(function(use)
     -- Cheat codez
     use 'github/copilot.vim'
 
-    -- Don't get cut on that sharp letter C
-    use 'OmniSharp/omnisharp-vim'
-
     -- Makin' Gamez (maybe)
     use 'habamax/vim-godot'
 
     -- Make that markdown glow!
     use 'ellisonleao/glow.nvim'
+
+    -- Table of contents is table stakes (for markdown)
+    use 'mzlogin/vim-markdown-toc'
 end)
