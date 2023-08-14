@@ -242,3 +242,19 @@ exec_always picom --config ~/.config/picom/picom.conf -b --experimental-backend
 exec_always ~/.screenlayout/screen.sh
 # Run Corsair CKB utility.
 #exec_always ckb-next -b
+
+# Make Godot windows float
+for_window [title="*(DEBUG)"] floating enable
+for_window [instance="Godot_Editor"] floating disable
+
+# Locking workspaces to certain monitors
+workspace $ws1 output DP-2
+workspace $ws2 output DP-2
+workspace $ws3 output DP-2
+workspace $ws4 output DP-2
+workspace $ws5 output DP-2
+workspace $ws6 output DP-2
+workspace $ws7 output DP-2
+workspace $ws8 output DP-2
+workspace $ws9 output HDMI-0
+workspace $ws10 output HDMI-0

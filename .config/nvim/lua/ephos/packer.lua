@@ -32,7 +32,6 @@ return require('packer').startup(function(use)
     -- Golang Lang
     use 'ray-x/go.nvim'
     use 'ray-x/guihua.lua' -- recommanded if need floating window support
-    use 'neovim/nvim-lspconfig'
 
     -- Find them bugs
     use 'mfussenegger/nvim-dap'
@@ -51,6 +50,7 @@ return require('packer').startup(function(use)
     use 'saadparwaiz1/cmp_luasnip'
     use 'hrsh7th/cmp-nvim-lsp'
     use 'hrsh7th/cmp-nvim-lua'
+    use 'onsails/lspkind.nvim' -- LSP / CMP icons
     -- Snippets
     use 'L3MON4D3/LuaSnip'
     use 'rafamadriz/friendly-snippets'
@@ -58,6 +58,7 @@ return require('packer').startup(function(use)
     -- Don't cut yourself on this C#
     -- Also make sure to install this (https://github.com/OmniSharp/omnisharp-roslyn)
     use 'OmniSharp/omnisharp-vim'
+--    use 'Issafalcon/lsp-overloads.nvim' -- Overloading LSP for C# support
 
     -- I know I should use netrw, but I want fancy icons
     use {
@@ -93,8 +94,15 @@ return require('packer').startup(function(use)
     use 'wfxr/minimap.vim'
 
     -- Cheat codez
-    use 'github/copilot.vim'
-
+    --use 'github/copilot.vim'
+    use "zbirenbaum/copilot.lua"
+    use {
+      "zbirenbaum/copilot-cmp",
+      after = { "copilot.lua", "nvim-cmp" },
+      config = function ()
+        require("copilot_cmp").setup()
+      end
+    }
     -- Makin' Gamez (maybe)
     use 'habamax/vim-godot'
 

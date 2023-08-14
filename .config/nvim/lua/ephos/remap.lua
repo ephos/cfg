@@ -14,3 +14,8 @@ vim.keymap.set("n", "d", '"_d')
 
 -- Disable recording
 vim.keymap.set("n", "q", "<nop>")
+
+-- Move lines with Alt+j/k
+vim.keymap.set("n", "<A-j>", ":m .+1<CR>==")
+vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")
+

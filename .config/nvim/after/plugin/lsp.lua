@@ -17,6 +17,10 @@ require("mason-lspconfig").setup {
     ensure_installed = { "lua_ls", "powershell_es", "pyright", "gopls" },
 }
 
+local lspkind = require("lspkind")
+
+vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
+
 -- Remapping some keys for CMP and making it look -~Fancy~-
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
@@ -34,29 +38,41 @@ cmp.setup {
         ['CR'] = cmp.mapping.complete(),
     },
     sources = cmp.config.sources({
-        { name = 'nvim_lsp' },
-        { name = 'luasnip' },
-        { name = 'buffer' },
-        { name = 'path' },
-        }, {
-            { name = 'nvim_lua' },
+        { name = 'nvim_lsp', group_index = 1 },
+        { name = 'luasnip', group_index = 1 },
+        { name = 'buffer', group_index = 1  },
+        { name = 'path', group_index = 1   },
+        { name = 'copilot', group_index = 4 },
+        { name = 'nvim_lua', group_index = 2 },
     }),
     formatting = {
-        fields = {'menu', 'abbr', 'kind'},
-        format = function(entry, item)
-            local menu_icon = {
-                nvim_lsp = '',
-                luasnip = '',
-                buffer = '󰊄',
-                path = '',
-        }
-        item.menu = menu_icon[entry.source.name]
-        return item
-        end,
+        format = lspkind.cmp_format({
+          mode = 'text_symbol',
+          symbol_map = {
+            Copilot = ""
+          },
+          menu = ({
+              buffer = "[Buffer]",
+              nvim_lsp = "[LSP]",
+              luasnip = "[LuaSnip]",
+              path = "[Path]",
+              copilot = "[Copilot]"
+          }),
+          maxwidth = 50,
+          ellipsis_char = '...',
+          -- The function below will be called before any actual modifications from lspkind
+          -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+          before = function (entry, vim_item)
+            return vim_item
+          end
+        })
     },
     window = {
         completion = {
             border = 'rounded',
+        },
+        documentation = {
+            border = 'rounded'
         }
     }
 }
@@ -86,6 +102,54 @@ require('lspconfig').gopls.setup {
         },
     },
 }
+
+-- Local vars for Godot
+local port = os.getenv('GDScript_Port') or '6005'
+local cmd = vim.lsp.rpc.connect('127.0.0.1', port)
+local pipe = '/tmp/godot.pipe' -- I use /tmp/godot.pipe
+
+-- This is hacky AF but was the only easy way I could get the LSP to attach to the right buffer
+-- This makes it so I can run 'nvim .' and then use telescope and nvimtree still
+_G.RestartGDScriptLSP = function()
+  -- Stop existing GDScript LSP client(s)
+  for _, client in ipairs(vim.lsp.buf_get_clients()) do
+    if client.name == 'gdscript' then
+      client.stop()
+    end
+  end
+    require('lspconfig').gdscript.setup {
+
+        name = 'Godot',
+        cmd = cmd,
+        root_dir = function(fname)
+            local project_files = { 'project.godot', '.git' }
+            return vim.fn.finddir(table.concat(project_files, ";"), fname .. ';')
+        end,
+        on_attach = function(client, bufnr)
+            vim.api.nvim_command('echo serverstart("' .. pipe .. '")')
+            print("LSP attached to buffer:", bufnr)
+            --local opts = { noremap=true, silent=true }
+            --vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+            vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", {noremap = true, silent = true, buffer=bufnr})
+            vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", {noremap = true, silent = true, buffer=bufnr})
+            vim.keymap.set("n", "gt", "<cmd>lua vim.lsp.buf.type_definition()<CR>", {noremap = true, silent = true, buffer=bufnr})
+            vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", {noremap = true, silent = true, buffer=bufnr})
+        end,
+
+        docs = {
+            description = [[https://github.com/godotengine/godot
+
+    Language server for GDScript, used by Godot Engine.
+    ]],
+        },
+
+    }
+end
+
+vim.cmd [[
+  autocmd BufEnter *.gd lua RestartGDScriptLSP()
+]]
+
 
 require('lspconfig').terraformls.setup {
     capabilities = capabilities,
@@ -228,6 +292,7 @@ require 'lspconfig'.omnisharp.setup {
     cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
     filetypes = { "cs", "csharp" },
 }
+
 
 local path_to_elixirls = vim.fn.expand("~/.cache/nvim/lspconfig/elixirls/elixir-ls/release/language_server.sh")
 require 'lspconfig'.elixirls.setup {
