@@ -1,3 +1,4 @@
+-- DAP Keybinds
 vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>")
 vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>")
 vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>")
@@ -25,3 +26,30 @@ end
 dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
+
+-- DAP requires both an adapter and a configuration
+
+-- PowerShell
+
+local PSES_BUNDLE_PATH = vim.fn.expand("~/.local/share/nvim/mason/packages/powershell-editor-services/PowerShellEditorServices/Start-EditorServices.ps1")
+local SESSION_TEMP_PATH = "/tmp/nvim_powershell_session"
+
+dap.adapters.powershell = {
+  type = 'executable',
+  command = 'pwsh', -- Use 'powershell.exe' on Windows if not using PowerShell Core
+  args = {'-NoLogo', '-NoProfile', '-Command', PSES_BUNDLE_PATH, '-BundledModulesPath', PSES_BUNDLE_PATH, '-LogPath', SESSION_TEMP_PATH .. "/logs.log", '-SessionDetailsPath', SESSION_TEMP_PATH .. "/session.json", '-FeatureFlags', '@()', '-AdditionalModules', '@()', '-HostName', 'nvim', '-HostProfileId', 'nvim', '-HostVersion', '1.0.0', '-Stdio', '-LogLevel', 'Normal'},
+}
+
+dap.configurations.ps1 = {
+  {
+    type = 'powershell',
+    request = 'launch',
+    name = "PowerShell Debug",
+    script = '${file}', -- Debug the current file
+    cwd = '${workspaceFolder}',
+    -- Optional configurations:
+    -- args = {'some', 'args'}, -- Arguments to the script
+    -- env = {Variable = "value"}, -- Environment variables
+    -- externalConsole = false, -- Use an external console
+  }
+}

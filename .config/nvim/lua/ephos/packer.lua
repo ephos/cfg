@@ -9,12 +9,17 @@ return require('packer').startup(function(use)
 
     -- If you aint' fuzzy finding you're already lost
     use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.0',
+        'nvim-telescope/telescope.nvim', tag = '0.1.4',
         requires = { { 'nvim-lua/plenary.nvim' } }
     }
 
     -- Gimme them sweet sweet colors!
     use('folke/tokyonight.nvim')
+    use('EdenEast/nightfox.nvim')
+
+    -- Hyroglyphics are back in style
+    use "stevearc/dressing.nvim"
+    use "ziontee113/icon-picker.nvim"
 
     -- Tree Sitter for that need to have AST
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
@@ -29,6 +34,10 @@ return require('packer').startup(function(use)
     -- I get lost without my vertical lines
     use "lukas-reineke/indent-blankline.nvim"
 
+    -- Boy am I rusty
+    -- Adds extra functionality over rust analyzer
+    use "simrat39/rust-tools.nvim"
+
     -- Golang Lang
     use 'ray-x/go.nvim'
     use 'ray-x/guihua.lua' -- recommanded if need floating window support
@@ -37,7 +46,7 @@ return require('packer').startup(function(use)
     use 'mfussenegger/nvim-dap'
     use 'leoluz/nvim-dap-go'
     use 'theHamsta/nvim-dap-virtual-text'
-    use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
+    use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } }
 
     --LSP Support, LSP you autocomplete me!
     use 'neovim/nvim-lspconfig'

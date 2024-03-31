@@ -1,3 +1,4 @@
+-- List of LSP configs: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 -- Need this to bridge the lsp and cmd
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 vim.opt.completeopt = {'menuone', 'noselect', 'noselect'}
@@ -12,6 +13,7 @@ require("mason").setup({
         }
     }
 })
+
 -- Make sure that nvim LSP client can lazy load these suckers
 require("mason-lspconfig").setup {
     ensure_installed = { "lua_ls", "powershell_es", "pyright", "gopls" },
@@ -80,19 +82,31 @@ cmp.setup {
 -- Getting nice inline errors with Trouble to tell me how bad I am
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = true })
 
+-- Set global key binds for the LSP for all the languages, no need to re-define N times. 
+local on_attach = function(client, bufnr)
+
+    local bufopts = { noremap = true, silent = true, buffer = bufnr }
+    --Enable completion
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
+    vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, bufopts)
+    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
+    vim.keymap.set("n", "<leader>gn", vim.diagnostic.goto_next, bufopts)
+    vim.keymap.set("n", "<leader>f", function() vim.lsp.buf.format {async = true } end, bufopts)
+    vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, bufopts)
+
+end
+
 local lspconfig = require('lspconfig')
 local lsp_defaults = lspconfig.util.default_config
 
+--------------------------------------------------------------------
+-- Go
 require('lspconfig').gopls.setup {
     capabilities = capabilities,
     on_attach = on_attach,
     flags = lsp_flags,
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, {buffer=0}),
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer=0}),
-    vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, {buffer=0}),
-    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {buffer=0}),
-    vim.keymap.set("n", "<leader>gn", vim.diagnostic.goto_next, {buffer=0}),
-    vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, {buffer=0}),
     settings = {
         gopls = {
             analyses = {
@@ -103,11 +117,29 @@ require('lspconfig').gopls.setup {
     },
 }
 
+--------------------------------------------------------------------
+--Rust
+require('lspconfig').rust_analyzer.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    flags = lsp_flags,
+    settings = {
+        ["rust-analyzer"] = {
+            cargo = {
+              extraEnv = { CARGO_PROFILE_RUST_ANALYZER_INHERITS = 'dev', },
+              extraArgs = { "--profile", "rust-analyzer", },
+            },
+        },
+    },
+}
+
+--------------------------------------------------------------------
+--Godot/GDScript
+
 -- Local vars for Godot
 local port = os.getenv('GDScript_Port') or '6005'
 local cmd = vim.lsp.rpc.connect('127.0.0.1', port)
 local pipe = '/tmp/godot.pipe' -- I use /tmp/godot.pipe
-
 -- This is hacky AF but was the only easy way I could get the LSP to attach to the right buffer
 -- This makes it so I can run 'nvim .' and then use telescope and nvimtree still
 _G.RestartGDScriptLSP = function()
@@ -131,7 +163,7 @@ _G.RestartGDScriptLSP = function()
             --local opts = { noremap=true, silent=true }
             --vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
             vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", {noremap = true, silent = true, buffer=bufnr})
-            vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", {noremap = true, silent = true, buffer=bufnr})
+            vim.keymap.set("n", vim"gd", "<cmd>lua vim.lsp.buf.definition()<CR>", {noremap = true, silent = true, buffer=bufnr})
             vim.keymap.set("n", "gt", "<cmd>lua vim.lsp.buf.type_definition()<CR>", {noremap = true, silent = true, buffer=bufnr})
             vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", {noremap = true, silent = true, buffer=bufnr})
         end,
@@ -150,15 +182,20 @@ vim.cmd [[
   autocmd BufEnter *.gd lua RestartGDScriptLSP()
 ]]
 
+--[[
+require 'lspconfig'.gdscript.setup {
+    on_attach = on_attach,
+    flags = lsp_flags,
+    filetypes = { "gd", "gdscript", "gdscript3" },
+}
+]]--
 
+--------------------------------------------------------------------
+--Terraform
 require('lspconfig').terraformls.setup {
     capabilities = capabilities,
     on_attach = on_attach,
     flags = lsp_flags,
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, {buffer=0}),
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer=0}),
-    vim.keymap.set("n", "<leader>gn", vim.diagnostic.goto_next, {buffer=0}),
-    vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, {buffer=0}),
     settings = {
         terraform = {
             analyses = {
@@ -169,16 +206,12 @@ require('lspconfig').terraformls.setup {
     },
 }
 
+--------------------------------------------------------------------
+--Marksman
 require('lspconfig').marksman.setup {
     capabilities = capabilities,
     on_attach = on_attach,
     flags = lsp_flags,
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, {buffer=0}),
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer=0}),
-    vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, {buffer=0}),
-    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {buffer=0}),
-    vim.keymap.set("n", "<leader>gn", vim.diagnostic.goto_next, {buffer=0}),
-    vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, {buffer=0}),
     settings = {
         marksman = {
             analyses = {
@@ -189,20 +222,24 @@ require('lspconfig').marksman.setup {
     },
 }
 
--- local PSES_BUNDLE_PATH = vim.fn.expand("~/.local/share/nvim/mason/packages/powershell-editor-services/PowerShellEditorServices/Start-EditorServices.ps1")
--- local SESSION_TEMP_PATH = "/tmp/nvim_powershell_session"
--- Ensure the temporary directory exists
--- vim.fn.mkdir(SESSION_TEMP_PATH, "p")
-require 'lspconfig'.powershell_es.setup {
+--------------------------------------------------------------------
+--PowerShell
+local PSES_BUNDLE_PATH = vim.fn.expand("~/.local/share/nvim/mason/packages/powershell-editor-services/PowerShellEditorServices/Start-EditorServices.ps1")
+local SESSION_TEMP_PATH = "/tmp/nvim_powershell_session"
+vim.fn.mkdir(SESSION_TEMP_PATH, "p") --Ensure the temporary directory exists
+require('lspconfig').powershell_es.setup {
+    --[[
+    I didn't end up needing this but I used to before a change an I am afraid I may need it again someday.
+    Bundle path points to where Mason extracts PSES
+    The following "vim.fn.stdpath("data")" -> "~/.local/share/nvim/", see :h stdpath for details.
+    --bundle_path = (vim.fn.stdpath("data") .. "/mason/packages/powershell-editor-services/PowerShellEditorServices"),
+    ]]--
     capabilities = capabilities,
     on_attach = on_attach,
     flags = lsp_flags,
---    cmd = { "pwsh", "-NoLogo", "-NoProfile", "-Command", PSES_BUNDLE_PATH .. " -BundledModulesPath " .. PSES_BUNDLE_PATH .. " -LogPath " .. SESSION_TEMP_PATH .. "/logs.log -SessionDetailsPath " .. SESSION_TEMP_PATH .. "/session.json -FeatureFlags @() -AdditionalModules @() -HostName 'My Client' -HostProfileId 'myclient' -HostVersion 1.0.0 -Stdio -LogLevel Normal" },
+    cmd = { "pwsh", "-NoLogo", "-NoProfile", "-Command", PSES_BUNDLE_PATH .. " -BundledModulesPath " .. PSES_BUNDLE_PATH .. " -LogPath " .. SESSION_TEMP_PATH .. "/logs.log -SessionDetailsPath " .. SESSION_TEMP_PATH .. "/session.json -FeatureFlags @() -AdditionalModules @() -HostName 'My Client' -HostProfileId 'myclient' -HostVersion 1.0.0 -Stdio -LogLevel Normal" },
     filetypes = { "ps1", "psm1", "psd1" },
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, {buffer=0}),
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer=0}),
-    vim.keymap.set("n", "<leader>gn", vim.diagnostic.goto_next, {buffer=0}),
-    vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, {buffer=0}),
+    single_file_support = true,
     settings = {
         powershell = {
             codeFormatting = {
@@ -231,15 +268,14 @@ require 'lspconfig'.powershell_es.setup {
     }
 }
 
+--------------------------------------------------------------------
+--Python
 --local PYRIGHT_PATH = vim.fn.expand("~/.local/share/nvim/mason/packages/pyright/node_modules/pyright/dist/pyright-langserver.js")
-require 'lspconfig'.pyright.setup {
+require('lspconfig').pyright.setup {
     capabilities = capabilities,
     on_attach = on_attach,
     flags = lsp_flags,
---    cmd = { "node", PYRIGHT_PATH, "--stdio" },
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, {buffer=0}),
-    vim.keymap.set("n", "gd", vim.lsp.buf.definition, {buffer=0}),
-    vim.keymap.set("n", "gn", vim.diagnostic.goto_next, {buffer=0}),
+    --cmd = { "node", PYRIGHT_PATH, "--stdio" },
     settings = {
         python = {
             analysis = {
@@ -254,6 +290,8 @@ require 'lspconfig'.pyright.setup {
     }
 }
 
+--------------------------------------------------------------------
+--Yaml
 require 'lspconfig'.yamlls.setup {
     on_attach = on_attach,
     flags = lsp_flags,
@@ -268,7 +306,9 @@ require 'lspconfig'.yamlls.setup {
     }
 }
 
-require 'lspconfig'.lua_ls.setup {
+--------------------------------------------------------------------
+--Lua
+require('lspconfig').lua_ls.setup {
     on_attach = on_attach,
     flags = lsp_flags,
     settings = {
@@ -280,12 +320,8 @@ require 'lspconfig'.lua_ls.setup {
     }
 }
 
-require 'lspconfig'.gdscript.setup {
-    on_attach = on_attach,
-    flags = lsp_flags,
-    filetypes = { "gd", "gdscript", "gdscript3" },
-}
-
+--------------------------------------------------------------------
+--C#
 require 'lspconfig'.omnisharp.setup {
     on_attach = on_attach,
     flags = lsp_flags,
@@ -293,10 +329,10 @@ require 'lspconfig'.omnisharp.setup {
     filetypes = { "cs", "csharp" },
 }
 
-
+--------------------------------------------------------------------
+--Exlixir
 local path_to_elixirls = vim.fn.expand("~/.cache/nvim/lspconfig/elixirls/elixir-ls/release/language_server.sh")
 require 'lspconfig'.elixirls.setup {
-    cmd = { path_to_elixirls },
     on_attach = on_attach,
     flags = lsp_flags,
     cmd = { path_to_elixirls },

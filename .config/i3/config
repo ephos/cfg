@@ -209,7 +209,7 @@ exec_always --no-startup-id  ~/.config/polybar/launch.sh
 
 # Lock functionality.
 #bindsym $mod+shift+x exec i3lock --color "$bg-color"
-bindsym $mod+shift+x exec ~/.config/i3/i3lock.sh #-i ~/images/wallpaper15.jpg -f -t
+bindsym $mod+shift+x exec ~/.config/i3/i3lock.sh #-i ~/images/wallpaper/wallpaper15.jpg -f -t
 
 # Hardware player controls.
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #Increase volume +5%
@@ -226,7 +226,7 @@ bindsym $mod+p exec flameshot gui
 
 # Set wallpaper.
 #exec_always feh --bg-center --scale-down ~/images/wallpaper17.jpg
-exec_always feh --bg-center ~/images/wallpaper23.png
+exec_always feh --bg-center ~/images/wallpaper/wallpaper23.png
 
 # Workspace assignments
 #assign [class="Kitty"] $ws2
@@ -239,7 +239,7 @@ exec_always feh --bg-center ~/images/wallpaper23.png
 # Use picom for transparancy and visual effects, use -b for background running.
 exec_always picom --config ~/.config/picom/picom.conf -b --experimental-backend
 # Set randr screen layouts.
-exec_always ~/.screenlayout/screen.sh
+exec_always ~/.screenlayout/screen2.sh
 # Run Corsair CKB utility.
 #exec_always ckb-next -b
 
@@ -254,7 +254,7 @@ workspace $ws3 output DP-2
 workspace $ws4 output DP-2
 workspace $ws5 output DP-2
 workspace $ws6 output DP-2
-workspace $ws7 output DP-2
-workspace $ws8 output DP-2
-workspace $ws9 output HDMI-0
-workspace $ws10 output HDMI-0
+workspace $ws9 output DP-0
+workspace $ws10 output DP-0
+workspace $ws7 output HDMI-0
+workspace $ws8 output HDMI-0
