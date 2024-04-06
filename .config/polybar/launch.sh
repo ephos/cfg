@@ -9,12 +9,25 @@ killall -q polybar
 echo "---" | tee -a /tmp/polybar1.log
 #polybar bar1 >>/tmp/polybar1.log 2>&1 & disown
 
+## Undust this code if I ever go back to not having top monitors!
+#if type "xrandr"; then
+#  for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+#    MONITOR=$m polybar --reload primary >>/tmp/polybar1.log 2>&1 & disown
+#  done
+#else
+#  polybar --reload primary >>/tmp/polybar1.log 2>&1 & disown
+#fi
+
 if type "xrandr"; then
   for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
-    MONITOR=$m polybar --reload bar1 >>/tmp/polybar1.log 2>&1 & disown
+    if [ "$m" == "DP-2" ]; then
+      MONITOR=$m polybar --reload primary >>/tmp/polybar1.log 2>&1 & disown
+    elif [ "$m" == "HDMI-0" ] || [ "$m" == "DP-0" ]; then
+      MONITOR=$m polybar --reload secondary >>/tmp/polybar1.log 2>&1 & disown
+    fi
   done
 else
-  polybar --reload bar1 >>/tmp/polybar1.log 2>&1 & disown
+  polybar --reload primary >>/tmp/polybar1.log 2>&1 & disown
 fi
 
 echo "Bars launched..."

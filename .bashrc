@@ -123,3 +123,6 @@ source "$OSH"/oh-my-bash.sh
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 source /home/ephos/.config/broot/launcher/bash/br
+
+# Created by `pipx` on 2023-11-08 02:42:40
+export PATH="$PATH:/home/ephos/.local/bin"
