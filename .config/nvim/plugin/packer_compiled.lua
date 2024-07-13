@@ -49,8 +49,8 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/home/bobby/.cache/nvim/packer_hererocks/2.1.1702233742/share/lua/5.1/?.lua;/home/bobby/.cache/nvim/packer_hererocks/2.1.1702233742/share/lua/5.1/?/init.lua;/home/bobby/.cache/nvim/packer_hererocks/2.1.1702233742/lib/luarocks/rocks-5.1/?.lua;/home/bobby/.cache/nvim/packer_hererocks/2.1.1702233742/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/home/bobby/.cache/nvim/packer_hererocks/2.1.1702233742/lib/lua/5.1/?.so"
+local package_path_str = "/home/bobby/.cache/nvim/packer_hererocks/2.1.1720049189/share/lua/5.1/?.lua;/home/bobby/.cache/nvim/packer_hererocks/2.1.1720049189/share/lua/5.1/?/init.lua;/home/bobby/.cache/nvim/packer_hererocks/2.1.1720049189/lib/luarocks/rocks-5.1/?.lua;/home/bobby/.cache/nvim/packer_hererocks/2.1.1720049189/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/home/bobby/.cache/nvim/packer_hererocks/2.1.1720049189/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -307,8 +307,8 @@ _G.packer_plugins = {
 time([[Defining packer_plugins]], false)
 -- Load plugins in order defined by `after`
 time([[Sequenced loading]], true)
-vim.cmd [[ packadd copilot.lua ]]
 vim.cmd [[ packadd nvim-cmp ]]
+vim.cmd [[ packadd copilot.lua ]]
 vim.cmd [[ packadd copilot-cmp ]]
 
 -- Config for: copilot-cmp

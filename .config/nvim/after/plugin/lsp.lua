@@ -3,6 +3,9 @@
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 vim.opt.completeopt = {'menuone', 'noselect', 'noselect'}
 
+-- Auto Format with LSP, no-op if non found
+vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
+
 -- Who but WB Mason to install our LSPs?
 require("mason").setup({
     ui = {

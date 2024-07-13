@@ -19,3 +19,11 @@ vim.keymap.set("n", "q", "<nop>")
 vim.keymap.set("n", "<A-j>", ":m .+1<CR>==")
 vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")
 
+-- Walk through errors
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous [D]iagnostic message" })
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next [D]iagnostic message" })
+
+-- Messing around
+--vim.keymap.set("n", "<leader>b", function ()
+--    print("You're doing great Rob!")
+--end)
